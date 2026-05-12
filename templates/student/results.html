@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}My Results — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container">
+    <div class="page-header animate-in">
+      <h1>📊 My Results</h1>
+      <p>Your complete quiz history and performance</p>
+    </div>
+
+    {% if results %}
+    <div class="card animate-in">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Quiz</th><th>Course</th><th>Score</th><th>Percentage</th><th>Date</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            {% for r in results %}
+            <tr>
+              <td><strong>{{ r['quiz_title'] }}</strong></td>
+              <td>{{ r['course_name'] }}</td>
+              <td>{{ r['score'] }}/{{ r['total'] }}</td>
+              <td>
+                {% if r['percentage'] >= 80 %}
+                <span class="badge badge-success">{{ r['percentage'] }}%</span>
+                {% elif r['percentage'] >= 50 %}
+                <span class="badge badge-warning">{{ r['percentage'] }}%</span>
+                {% else %}
+                <span class="badge badge-error">{{ r['percentage'] }}%</span>
+                {% endif %}
+              </td>
+              <td style="color:var(--text-secondary); font-size:.85rem;">{{ r['completed_at'][:10] if r['completed_at'] else 'N/A' }}</td>
+              <td><a href="{{ url_for('view_result', attempt_id=r['id']) }}" class="btn btn-sm btn-secondary">View</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="card empty-state animate-in">
+      <div class="empty-icon">📊</div>
+      <h3>No Results Yet</h3>
+      <p>Take your first quiz to see your results here.</p>
+      <a href="{{ url_for('student_dashboard') }}" class="btn btn-primary mt-2">Browse Quizzes</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

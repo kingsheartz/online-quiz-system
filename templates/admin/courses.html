@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Courses — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container" style="max-width:900px;">
+    <div class="page-header animate-in">
+      <h1>📚 Course Management</h1>
+      <p>Create and manage courses</p>
+    </div>
+
+    <div class="card animate-in mb-3">
+      <div class="card-header"><h3>Add New Course</h3></div>
+      <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Course Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="e.g. Data Structures" required>
+          </div>
+          <div class="form-group">
+            <label for="code">Course Code</label>
+            <input type="text" name="code" id="code" class="form-control" placeholder="e.g. CS201" required style="text-transform:uppercase;">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Description (optional)</label>
+          <input type="text" name="description" id="description" class="form-control" placeholder="Brief description of the course">
+        </div>
+        <button type="submit" class="btn btn-primary">Create Course</button>
+      </form>
+    </div>
+
+    {% if courses %}
+    <div class="card animate-in">
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Code</th><th>Name</th><th>Quizzes</th><th>Faculty</th><th>Action</th></tr></thead>
+          <tbody>
+            {% for c in courses %}
+            <tr>
+              <td><span class="badge badge-accent">{{ c['code'] }}</span></td>
+              <td><strong>{{ c['name'] }}</strong>{% if c['description'] %}<br><small style="color:var(--text-muted);">{{ c['description'] }}</small>{% endif %}</td>
+              <td>{{ c['quiz_count'] }}</td>
+              <td>{{ c['faculty_count'] }}</td>
+              <td>
+                <form method="POST" class="confirm-delete" style="display:inline;">
+                  <input type="hidden" name="action" value="delete">
+                  <input type="hidden" name="course_id" value="{{ c['id'] }}">
+                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

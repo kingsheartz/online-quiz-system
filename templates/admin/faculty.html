@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Faculty — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container" style="max-width:1000px;">
+    <div class="page-header animate-in">
+      <h1>👨‍🏫 Faculty Management</h1>
+      <p>Register faculty members and assign courses</p>
+    </div>
+
+    <div class="card animate-in mb-3">
+      <div class="card-header"><h3>Register New Faculty</h3></div>
+      <form method="POST">
+        <input type="hidden" name="action" value="register">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Dr. John Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="faculty@example.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Set a password" required>
+          </div>
+          <div class="form-group">
+            <label>Assign Courses</label>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              {% for c in courses %}
+              <label style="display:flex; align-items:center; gap:6px; padding:6px 12px; background:var(--bg-input); border-radius:8px; cursor:pointer; font-size:.85rem;">
+                <input type="checkbox" name="course_ids" value="{{ c['id'] }}" style="accent-color:var(--accent);">
+                {{ c['name'] }}
+              </label>
+              {% endfor %}
+              {% if not courses %}
+              <span style="color:var(--text-muted); font-size:.85rem;">No courses created yet</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Register Faculty</button>
+      </form>
+    </div>
+
+    {% if faculty %}
+    <div class="card animate-in">
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Courses</th><th>Actions</th></tr></thead>
+          <tbody>
+            {% for f in faculty %}
+            <tr>
+              <td><strong>{{ f['name'] }}</strong></td>
+              <td style="color:var(--text-secondary);">{{ f['email'] }}</td>
+              <td>
+                {% if f['course_names'] %}
+                <span class="badge badge-accent">{{ f['course_names'] }}</span>
+                {% else %}<span class="badge badge-warning">No courses</span>{% endif %}
+              </td>
+              <td>
+                <form method="POST" class="confirm-delete" style="display:inline;">
+                  <input type="hidden" name="action" value="delete">
+                  <input type="hidden" name="faculty_id" value="{{ f['id'] }}">
+                  <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

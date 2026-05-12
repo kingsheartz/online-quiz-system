@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container" style="max-width:800px;">
+    <div class="page-header text-center animate-in">
+      <h1>🏆 Leaderboard</h1>
+      <p>Top performers across all quizzes</p>
+    </div>
+    {% if results %}
+    <div class="card animate-in">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Student</th><th>Quizzes Taken</th><th>Avg Score</th><th>Best Score</th></tr>
+          </thead>
+          <tbody>
+            {% for r in results %}
+            <tr>
+              <td>
+                {% if loop.index == 1 %}🥇
+                {% elif loop.index == 2 %}🥈
+                {% elif loop.index == 3 %}🥉
+                {% else %}{{ loop.index }}{% endif %}
+              </td>
+              <td><strong>{{ r['name'] }}</strong></td>
+              <td>{{ r['attempts'] }}</td>
+              <td><span class="badge badge-accent">{{ r['avg_score'] }}%</span></td>
+              <td><span class="badge badge-success">{{ r['best_score'] }}%</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="card empty-state animate-in">
+      <div class="empty-icon">🏆</div>
+      <h3>No Results Yet</h3>
+      <p>Be the first to take a quiz and appear on the leaderboard!</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

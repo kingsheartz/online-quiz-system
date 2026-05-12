@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Questions — {{ quiz['title'] }} — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container" style="max-width:900px;">
+    <div class="page-header animate-in">
+      <h1>{{ quiz['title'] }}</h1>
+      <p>{{ quiz['course_name'] }} · Manage questions for this quiz</p>
+    </div>
+
+    <!-- Add Question Form -->
+    <div class="card animate-in mb-3">
+      <div class="card-header"><h3>Add Question</h3></div>
+      <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <div class="form-group">
+          <label for="question">Question</label>
+          <input type="text" name="question" id="question" class="form-control" placeholder="Enter the question" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="option1">Option A</label>
+            <input type="text" name="option1" id="option1" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="option2">Option B</label>
+            <input type="text" name="option2" id="option2" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="option3">Option C</label>
+            <input type="text" name="option3" id="option3" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="option4">Option D</label>
+            <input type="text" name="option4" id="option4" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="correct_answer">Correct Answer (must match one option exactly)</label>
+          <input type="text" name="correct_answer" id="correct_answer" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Question</button>
+      </form>
+    </div>
+
+    <!-- Questions List -->
+    <h3 class="animate-in mb-2" style="font-weight:700;">Questions ({{ questions|length }})</h3>
+    {% for q in questions %}
+    <div class="card animate-in mb-2">
+      <div class="flex-between mb-1">
+        <strong>Q{{ loop.index }}: {{ q['question'] }}</strong>
+        <form method="POST" class="confirm-delete" style="display:inline;">
+          <input type="hidden" name="action" value="delete">
+          <input type="hidden" name="question_id" value="{{ q['id'] }}">
+          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+        </form>
+      </div>
+      <div style="font-size:.85rem; color:var(--text-secondary); display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+        <span>A: {{ q['option1'] }}</span>
+        <span>B: {{ q['option2'] }}</span>
+        <span>C: {{ q['option3'] }}</span>
+        <span>D: {{ q['option4'] }}</span>
+      </div>
+      <div style="margin-top:8px;"><span class="badge badge-success">Answer: {{ q['correct_answer'] }}</span></div>
+    </div>
+    {% endfor %}
+
+    {% if not questions %}
+    <div class="card empty-state animate-in">
+      <div class="empty-icon">❓</div>
+      <h3>No Questions Yet</h3>
+      <p>Add questions using the form above.</p>
+    </div>
+    {% endif %}
+
+    <div class="mt-3 animate-in">
+      <a href="{{ url_for('faculty_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

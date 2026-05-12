@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container">
+    <div class="page-header animate-in">
+      <h1>Welcome, {{ current_user.name }} 👋</h1>
+      <p>Browse available quizzes and track your progress</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-3 mb-3">
+      <div class="card stat-card animate-in">
+        <div class="stat-icon">📝</div>
+        <div class="stat-value">{{ stats['total'] or 0 }}</div>
+        <div class="stat-label">Quizzes Taken</div>
+      </div>
+      <div class="card stat-card animate-in">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value">{{ stats['avg_score'] or 0 }}%</div>
+        <div class="stat-label">Average Score</div>
+      </div>
+      <div class="card stat-card animate-in">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value">{{ stats['best'] or 0 }}%</div>
+        <div class="stat-label">Best Score</div>
+      </div>
+    </div>
+
+    <!-- Available Quizzes -->
+    <div class="card-header animate-in">
+      <h2>Available Quizzes</h2>
+      <p>Select a quiz to begin your assessment</p>
+    </div>
+
+    {% if quizzes %}
+    <div class="grid grid-2">
+      {% for q in quizzes %}
+      <div class="card animate-in">
+        <div class="flex-between mb-2">
+          <span class="badge badge-accent">{{ q['course_code'] }}</span>
+          <span class="badge badge-info">{{ q['question_count'] }} questions</span>
+        </div>
+        <h3 style="font-weight:700; margin-bottom:4px;">{{ q['title'] }}</h3>
+        <p style="color:var(--text-secondary); font-size:.85rem; margin-bottom:4px;">{{ q['course_name'] }}</p>
+        <p style="color:var(--text-muted); font-size:.8rem; margin-bottom:16px;">By {{ q['faculty_name'] }} · {{ (q['duration']//60) }} min</p>
+        {% if q['question_count'] > 0 %}
+        <a href="{{ url_for('take_quiz', quiz_id=q['id']) }}" class="btn btn-primary btn-sm">Start Quiz →</a>
+        {% else %}
+        <span class="badge badge-warning">No questions yet</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="card empty-state animate-in">
+      <div class="empty-icon">📚</div>
+      <h3>No Quizzes Available</h3>
+      <p>Check back later — faculty will publish quizzes soon!</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

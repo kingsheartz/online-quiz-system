@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Students — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container">
+    <div class="page-header animate-in">
+      <h1>👨‍🎓 Students</h1>
+      <p>All registered students and their performance</p>
+    </div>
+
+    {% if students %}
+    <div class="card animate-in">
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Quizzes Taken</th><th>Avg Score</th><th>Joined</th></tr></thead>
+          <tbody>
+            {% for s in students %}
+            <tr>
+              <td><strong>{{ s['name'] }}</strong></td>
+              <td style="color:var(--text-secondary);">{{ s['email'] }}</td>
+              <td>{{ s['quiz_count'] }}</td>
+              <td>
+                {% if s['avg_score'] %}
+                <span class="badge badge-accent">{{ s['avg_score'] }}%</span>
+                {% else %}<span class="badge badge-warning">N/A</span>{% endif %}
+              </td>
+              <td style="color:var(--text-secondary); font-size:.85rem;">{{ s['created_at'][:10] if s['created_at'] else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="card empty-state animate-in">
+      <div class="empty-icon">👨‍🎓</div>
+      <h3>No Students Yet</h3>
+      <p>Students will appear here once they register.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

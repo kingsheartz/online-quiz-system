@@ -1,40 +1,28 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Register</title>
+{% extends "base.html" %}
+{% block title %}Register — QuizMaster{% endblock %}
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-
-  <body>
-    <div class="container mt-5">
-      <h2>User Registration</h2>
-
-      <form method="POST">
-        <div class="mb-3">
-          <label>Name</label>
-
-          <input type="text" class="form-control" name="name" />
-        </div>
-
-        <div class="mb-3">
-          <label>Email</label>
-
-          <input type="email" class="form-control" name="email" />
-        </div>
-
-        <div class="mb-3">
-          <label>Password</label>
-
-          <input type="password" class="form-control" name="password" />
-        </div>
-
-        <button class="btn btn-primary">Register</button>
-      </form>
-    </div>
-  </body>
-</html>
+{% block content %}
+<div class="auth-wrapper">
+  <div class="card auth-card animate-in">
+    <h1>Create Account</h1>
+    <p class="auth-subtitle">Join QuizMaster as a student and start learning</p>
+    <form method="POST" id="register-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" name="name" id="name" class="form-control" placeholder="John Doe" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control" placeholder="Create a strong password" required minlength="4">
+      </div>
+      <button type="submit" class="btn btn-primary w-full btn-lg">Create Account</button>
+    </form>
+    <p class="auth-divider">Already have an account?</p>
+    <a href="{{ url_for('login') }}" class="btn btn-secondary w-full">Sign In</a>
+  </div>
+</div>
+{% endblock %}

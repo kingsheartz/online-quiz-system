@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Result — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container" style="max-width:800px;">
+    <div class="card text-center animate-in mb-3">
+      <h2 style="margin-bottom:4px;">{{ attempt['quiz_title'] }}</h2>
+      <p style="color:var(--text-secondary);">{{ attempt['course_name'] }}</p>
+      <div class="score-circle mt-3">
+        <div class="score-value">{{ attempt['percentage'] }}%</div>
+        <div class="score-label">{{ attempt['score'] }}/{{ attempt['total'] }}</div>
+      </div>
+      <div class="flex" style="justify-content:center; gap:24px;">
+        <div>
+          <div style="font-size:.8rem; color:var(--text-muted);">Status</div>
+          {% if attempt['percentage'] >= 50 %}
+          <span class="badge badge-success">Passed</span>
+          {% else %}
+          <span class="badge badge-error">Failed</span>
+          {% endif %}
+        </div>
+        <div>
+          <div style="font-size:.8rem; color:var(--text-muted);">Date</div>
+          <span style="font-size:.9rem;">{{ attempt['completed_at'][:10] if attempt['completed_at'] else 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="animate-in mb-2" style="font-weight:700;">Answer Review</h3>
+    {% for a in answers %}
+    <div class="card answer-card {{ 'correct' if a['is_correct'] else 'incorrect' }} animate-in">
+      <div class="flex-between mb-1">
+        <strong style="font-size:.95rem;">{{ a['question'] }}</strong>
+        {% if a['is_correct'] %}
+        <span class="badge badge-success">✓ Correct</span>
+        {% else %}
+        <span class="badge badge-error">✗ Wrong</span>
+        {% endif %}
+      </div>
+      <div style="font-size:.85rem; color:var(--text-secondary);">
+        Your answer: <strong>{{ a['selected_answer'] or 'Not answered' }}</strong>
+        {% if not a['is_correct'] %}
+        <br>Correct answer: <strong style="color:var(--success);">{{ a['correct_answer'] }}</strong>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="flex mt-3 animate-in" style="justify-content:center; gap:12px;">
+      <a href="{{ url_for('results_history') }}" class="btn btn-secondary">All Results</a>
+      <a href="{{ url_for('student_dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

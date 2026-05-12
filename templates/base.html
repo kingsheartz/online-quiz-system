@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="{{ current_theme }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="QuizMaster — A modern online quiz platform for students, faculty, and administrators.">
+  <title>{% block title %}QuizMaster{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="nav-brand">🎓 QuizMaster</a>
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <ul class="nav-links">
+        {% if current_user.is_authenticated %}
+          {% if current_user.role == 'admin' %}
+            <li><a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.endpoint == 'admin_dashboard' }}">Dashboard</a></li>
+            <li><a href="{{ url_for('admin_courses') }}" class="{{ 'active' if request.endpoint == 'admin_courses' }}">Courses</a></li>
+            <li><a href="{{ url_for('admin_faculty') }}" class="{{ 'active' if request.endpoint == 'admin_faculty' }}">Faculty</a></li>
+            <li><a href="{{ url_for('admin_students') }}" class="{{ 'active' if request.endpoint == 'admin_students' }}">Students</a></li>
+            <li><a href="{{ url_for('admin_results') }}" class="{{ 'active' if request.endpoint == 'admin_results' }}">Results</a></li>
+          {% elif current_user.role == 'faculty' %}
+            <li><a href="{{ url_for('faculty_dashboard') }}" class="{{ 'active' if request.endpoint == 'faculty_dashboard' }}">Dashboard</a></li>
+            <li><a href="{{ url_for('faculty_quizzes') }}" class="{{ 'active' if request.endpoint == 'faculty_quizzes' }}">My Quizzes</a></li>
+          {% else %}
+            <li><a href="{{ url_for('student_dashboard') }}" class="{{ 'active' if request.endpoint == 'student_dashboard' }}">Dashboard</a></li>
+            <li><a href="{{ url_for('results_history') }}" class="{{ 'active' if request.endpoint == 'results_history' }}">My Results</a></li>
+          {% endif %}
+          <li><a href="{{ url_for('leaderboard') }}" class="{{ 'active' if request.endpoint == 'leaderboard' }}">Leaderboard</a></li>
+          <li><a href="{{ url_for('profile') }}" class="{{ 'active' if request.endpoint == 'profile' }}">Profile</a></li>
+          <li>
+            <div class="theme-switcher">
+              <button class="theme-btn {{ 'active' if current_theme=='dark' }}" data-theme="dark" title="Dark">🌙</button>
+              <button class="theme-btn {{ 'active' if current_theme=='light' }}" data-theme="light" title="Light">☀️</button>
+              <button class="theme-btn {{ 'active' if current_theme=='violet' }}" data-theme="violet" title="Violet">🔮</button>
+            </div>
+          </li>
+          <li><a href="{{ url_for('logout') }}" class="btn btn-sm btn-danger">Logout</a></li>
+        {% else %}
+          <li><a href="{{ url_for('leaderboard') }}">Leaderboard</a></li>
+          <li>
+            <div class="theme-switcher">
+              <button class="theme-btn {{ 'active' if current_theme=='dark' }}" data-theme="dark" title="Dark">🌙</button>
+              <button class="theme-btn {{ 'active' if current_theme=='light' }}" data-theme="light" title="Light">☀️</button>
+              <button class="theme-btn {{ 'active' if current_theme=='violet' }}" data-theme="violet" title="Violet">🔮</button>
+            </div>
+          </li>
+          <li><a href="{{ url_for('login') }}" class="btn btn-sm btn-primary">Login</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Page Content -->
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  {% block footer %}
+  <footer class="footer">
+    <div class="container">
+      <p>© 2024 QuizMaster — Built for Learning</p>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

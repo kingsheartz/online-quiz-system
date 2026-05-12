@@ -1,0 +1,22 @@
+# Online Quiz System Overhaul — Task Tracker
+
+- [/] **Phase 1: Foundation**
+  - [ ] Update requirements.txt
+  - [ ] Rewrite database.py (new schema + seed admin)
+  - [ ] Create helpers.py (decorators, DB helper)
+  - [ ] Rewrite app.py (all routes, Flask-Login)
+- [ ] **Phase 2: Static Assets**
+  - [ ] Create static/css/style.css (full design system, 3 themes)
+  - [ ] Create static/js/app.js (theme, timer, interactions)
+- [ ] **Phase 3: Templates**
+  - [ ] Create base.html (master layout)
+  - [ ] Create index.html (landing page)
+  - [ ] Create login.html & register.html
+  - [ ] Create student templates (dashboard, quiz, result, results, profile)
+  - [ ] Create faculty templates (dashboard, quizzes, questions, results)
+  - [ ] Create admin templates (dashboard, courses, faculty, students, results)
+  - [ ] Create leaderboard.html
+- [ ] **Phase 4: Cleanup & Test**
+  - [ ] Delete old templates
+  - [ ] Initialize DB
+  - [ ] Run & test in browser

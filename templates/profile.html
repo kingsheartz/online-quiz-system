@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Profile — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container" style="max-width:600px;">
+    <div class="page-header animate-in">
+      <h1>My Profile</h1>
+      <p>Manage your account settings</p>
+    </div>
+    <div class="card animate-in">
+      <form method="POST">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" name="name" id="name" class="form-control" value="{{ current_user.name }}" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" value="{{ current_user.email }}" disabled>
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <input type="text" class="form-control" value="{{ current_user.role|capitalize }}" disabled>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

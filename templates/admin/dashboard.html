@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container">
+    <div class="page-header animate-in">
+      <h1>Admin Dashboard</h1>
+      <p>System overview and management</p>
+    </div>
+
+    <div class="grid grid-4 mb-3">
+      <div class="card stat-card animate-in">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-value">{{ stats.students }}</div>
+        <div class="stat-label">Students</div>
+      </div>
+      <div class="card stat-card animate-in">
+        <div class="stat-icon">👨‍🏫</div>
+        <div class="stat-value">{{ stats.faculty }}</div>
+        <div class="stat-label">Faculty</div>
+      </div>
+      <div class="card stat-card animate-in">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">{{ stats.courses }}</div>
+        <div class="stat-label">Courses</div>
+      </div>
+      <div class="card stat-card animate-in">
+        <div class="stat-icon">📝</div>
+        <div class="stat-value">{{ stats.quizzes }}</div>
+        <div class="stat-label">Quizzes</div>
+      </div>
+    </div>
+
+    <div class="grid grid-2 mb-3">
+      <a href="{{ url_for('admin_courses') }}" class="card animate-in" style="text-decoration:none; color:inherit;">
+        <h3 style="font-weight:700;">📚 Manage Courses</h3>
+        <p style="color:var(--text-secondary);">Create courses and assign faculty</p>
+      </a>
+      <a href="{{ url_for('admin_faculty') }}" class="card animate-in" style="text-decoration:none; color:inherit;">
+        <h3 style="font-weight:700;">👨‍🏫 Manage Faculty</h3>
+        <p style="color:var(--text-secondary);">Register faculty and assign courses</p>
+      </a>
+    </div>
+
+    <h2 class="animate-in mb-2" style="font-weight:700;">Recent Activity</h2>
+    {% if recent %}
+    <div class="card animate-in">
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Student</th><th>Quiz</th><th>Score</th><th>Date</th></tr></thead>
+          <tbody>
+            {% for r in recent %}
+            <tr>
+              <td><strong>{{ r['student_name'] }}</strong></td>
+              <td>{{ r['quiz_title'] }}</td>
+              <td>
+                {% if r['percentage'] >= 80 %}<span class="badge badge-success">{{ r['percentage'] }}%</span>
+                {% elif r['percentage'] >= 50 %}<span class="badge badge-warning">{{ r['percentage'] }}%</span>
+                {% else %}<span class="badge badge-error">{{ r['percentage'] }}%</span>{% endif %}
+              </td>
+              <td style="color:var(--text-secondary); font-size:.85rem;">{{ r['completed_at'][:16] if r['completed_at'] else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="card empty-state animate-in">
+      <div class="empty-icon">📊</div>
+      <h3>No Activity Yet</h3>
+      <p>Results will appear here once students start taking quizzes.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Quiz Results — QuizMaster{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="container">
+    <div class="page-header animate-in">
+      <h1>{{ quiz['title'] }} — Results</h1>
+      <p>{{ quiz['course_name'] }} · Student performance</p>
+    </div>
+
+    {% if results %}
+    <div class="card animate-in">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Student</th><th>Email</th><th>Score</th><th>Percentage</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            {% for r in results %}
+            <tr>
+              <td><strong>{{ r['student_name'] }}</strong></td>
+              <td style="color:var(--text-secondary);">{{ r['student_email'] }}</td>
+              <td>{{ r['score'] }}/{{ r['total'] }}</td>
+              <td>
+                {% if r['percentage'] >= 80 %}<span class="badge badge-success">{{ r['percentage'] }}%</span>
+                {% elif r['percentage'] >= 50 %}<span class="badge badge-warning">{{ r['percentage'] }}%</span>
+                {% else %}<span class="badge badge-error">{{ r['percentage'] }}%</span>{% endif %}
+              </td>
+              <td style="color:var(--text-secondary); font-size:.85rem;">{{ r['completed_at'][:10] if r['completed_at'] else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="card empty-state animate-in">
+      <div class="empty-icon">📊</div>
+      <h3>No Attempts Yet</h3>
+      <p>No students have taken this quiz yet.</p>
+    </div>
+    {% endif %}
+
+    <div class="mt-3 animate-in">
+      <a href="{{ url_for('faculty_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
