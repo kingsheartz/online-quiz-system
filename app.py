@@ -292,17 +292,24 @@ def faculty_dashboard():
 def faculty_quizzes():
     conn = get_db()
     if request.method == "POST":
-        title = request.form.get("title", "").strip()
-        description = request.form.get("description", "").strip()
-        course_id = request.form.get("course_id", type=int)
-        duration = request.form.get("duration", 300, type=int)
-        if title and course_id:
-            conn.execute("INSERT INTO quizzes (title, description, course_id, faculty_id, duration) VALUES (?,?,?,?,?)",
-                         (title, description, course_id, current_user.id, duration))
+        action = request.form.get("action")
+        if action == "delete":
+            qid = request.form.get("quiz_id", type=int)
+            conn.execute("DELETE FROM quizzes WHERE id = ? AND faculty_id = ?", (qid, current_user.id))
             conn.commit()
-            flash("Quiz created successfully!", "success")
+            flash("Quiz deleted.", "success")
         else:
-            flash("Title and course are required.", "error")
+            title = request.form.get("title", "").strip()
+            description = request.form.get("description", "").strip()
+            course_id = request.form.get("course_id", type=int)
+            duration = request.form.get("duration", 300, type=int)
+            if title and course_id:
+                conn.execute("INSERT INTO quizzes (title, description, course_id, faculty_id, duration) VALUES (?,?,?,?,?)",
+                             (title, description, course_id, current_user.id, duration))
+                conn.commit()
+                flash("Quiz created successfully!", "success")
+            else:
+                flash("Title and course are required.", "error")
         conn.close()
         return redirect(url_for("faculty_quizzes"))
     courses = conn.execute("""
@@ -347,7 +354,7 @@ def manage_questions(quiz_id):
                 flash("All fields are required.", "error")
         elif action == "delete":
             qid = request.form.get("question_id", type=int)
-            conn.execute("DELETE FROM questions WHERE id = ? AND quiz_id = ?", (qid, quiz_id))
+            conn.execute("DELETE FROM questions WHERE id = ?", (qid,))
             conn.commit()
             flash("Question deleted.", "success")
         conn.close()
@@ -482,9 +489,10 @@ def admin_faculty():
                 flash("Name, email and password are required.", "error")
         elif action == "delete":
             fid = request.form.get("faculty_id", type=int)
-            conn.execute("DELETE FROM users WHERE id = ? AND role = 'faculty'", (fid,))
-            conn.commit()
-            flash("Faculty removed.", "success")
+            if fid:
+                conn.execute("DELETE FROM users WHERE id = ? AND role = 'faculty'", (fid,))
+                conn.commit()
+                flash("Faculty removed.", "success")
         elif action == "assign_course":
             fid = request.form.get("faculty_id", type=int)
             cid = request.form.get("course_id", type=int)

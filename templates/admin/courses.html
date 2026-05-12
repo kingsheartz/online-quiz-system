@@ -44,10 +44,10 @@
               <td>{{ c['quiz_count'] }}</td>
               <td>{{ c['faculty_count'] }}</td>
               <td>
-                <form method="POST" class="confirm-delete" style="display:inline;">
+                <form method="POST" style="display:inline;">
                   <input type="hidden" name="action" value="delete">
                   <input type="hidden" name="course_id" value="{{ c['id'] }}">
-                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                  <button type="button" class="btn btn-sm btn-danger btn-delete-confirm" data-message="Delete course '{{ c['name'] }}'?">Delete</button>
                 </form>
               </td>
             </tr>

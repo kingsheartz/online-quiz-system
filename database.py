@@ -99,8 +99,8 @@ def init_db():
         percentage REAL DEFAULT 0,
         started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         completed_at TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id),
-        FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
     )
     """)
 
@@ -114,7 +114,7 @@ def init_db():
         correct_answer TEXT NOT NULL,
         is_correct INTEGER DEFAULT 0,
         FOREIGN KEY (attempt_id) REFERENCES quiz_attempts(id) ON DELETE CASCADE,
-        FOREIGN KEY (question_id) REFERENCES questions(id)
+        FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
     )
     """)
 

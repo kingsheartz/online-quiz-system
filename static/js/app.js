@@ -37,13 +37,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
   });
 
-  // Confirm delete actions
-  document.querySelectorAll('.confirm-delete').forEach(form => {
-    form.addEventListener('submit', (e) => {
-      if (!confirm('Are you sure you want to delete this? This action cannot be undone.')) {
-        e.preventDefault();
-      }
+  // Custom Modal Logic
+  window.openModal = function(title, message, callback) {
+    const modal = document.getElementById('deleteModal');
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalMessage').innerText = message;
+    modal.classList.add('active');
+    
+    const confirmBtn = document.getElementById('confirmActionBtn');
+    // Remove old listeners
+    const newBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+    
+    newBtn.addEventListener('click', () => {
+      callback();
+      closeModal();
     });
+  };
+
+  window.closeModal = function() {
+    document.getElementById('deleteModal').classList.remove('active');
+  };
+
+  // Close modal on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Handle all delete button clicks using event delegation
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-delete-confirm');
+    if (btn) {
+      e.preventDefault();
+      const form = btn.closest('form');
+      const msg = btn.getAttribute('data-message') || 'Are you sure you want to delete this?';
+      openModal('Delete Confirmation', msg, () => {
+        form.submit();
+      });
+    }
   });
 
   // Radio option selection visual feedback

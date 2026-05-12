@@ -77,6 +77,19 @@
   </footer>
   {% endblock %}
 
+  <!-- Custom Modal -->
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-icon">⚠️</div>
+      <h3 id="modalTitle">Confirm Action</h3>
+      <p id="modalMessage">Are you sure you want to proceed? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmActionBtn">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>

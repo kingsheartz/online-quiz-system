@@ -61,7 +61,14 @@
                 {% if q['is_active'] %}<span class="badge badge-success">Active</span>
                 {% else %}<span class="badge badge-warning">Inactive</span>{% endif %}
               </td>
-              <td><a href="{{ url_for('manage_questions', quiz_id=q['id']) }}" class="btn btn-sm btn-secondary">Manage</a></td>
+              <td style="display:flex; gap:4px;">
+                <a href="{{ url_for('manage_questions', quiz_id=q['id']) }}" class="btn btn-sm btn-secondary">Manage</a>
+                <form method="POST" style="display:inline;">
+                  <input type="hidden" name="action" value="delete">
+                  <input type="hidden" name="quiz_id" value="{{ q['id'] }}">
+                  <button type="button" class="btn btn-sm btn-danger btn-delete-confirm" data-message="Delete quiz '{{ q['title'] }}'?">Delete</button>
+                </form>
+              </td>
             </tr>
             {% endfor %}
           </tbody>

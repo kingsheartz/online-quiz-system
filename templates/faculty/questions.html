@@ -52,10 +52,10 @@
     <div class="card animate-in mb-2">
       <div class="flex-between mb-1">
         <strong>Q{{ loop.index }}: {{ q['question'] }}</strong>
-        <form method="POST" class="confirm-delete" style="display:inline;">
+        <form method="POST" style="display:inline;">
           <input type="hidden" name="action" value="delete">
           <input type="hidden" name="question_id" value="{{ q['id'] }}">
-          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          <button type="button" class="btn btn-sm btn-danger btn-delete-confirm" data-message="Delete this question?">Delete</button>
         </form>
       </div>
       <div style="font-size:.85rem; color:var(--text-secondary); display:grid; grid-template-columns:1fr 1fr; gap:4px;">
